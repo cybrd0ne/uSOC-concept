@@ -1,0 +1,35 @@
+%% uSOC — end-to-end telemetry & normalization flow
+%% Source: SOHO Architecture §6.2 (Telemetry Collection and Normalization Layer)
+flowchart LR
+    subgraph EDGE["Edge — Router SOHO (normalize at source)"]
+        FW["firewall log<br/>(syslog BSD/5424)"]:::src
+        SUR["Suricata<br/>(EVE JSON)"]:::src
+        PFB["pfBlockerNG<br/>(IP/DNSBL text)"]:::src
+        ZEK["Zeek<br/>(TSV per-protocol)"]:::src
+        SNG["syslog-ng<br/>wildcard-file() · JSON template<br/>TCP + TLS forward"]:::proc
+        FW --> SNG
+        SUR --> SNG
+        PFB --> SNG
+        ZEK --> SNG
+    end
+
+    subgraph SIEM["SIEM device — residual normalization + enrichment"]
+        LS["Logstash ingest pipeline<br/>grok → rename→ECS → geoip → tag<br/>(event.dataset / event.kind / event.category)"]:::proc
+        OS["OpenSearch<br/>ECS v8 index templates"]:::store
+        DASH["Dashboards<br/>Security Overview · IDS · Zeek · DNSBL · GeoIP"]:::view
+        LS --> OS --> DASH
+    end
+
+    TI["External threat intel (inbound only)<br/>ET/Spamhaus/Abuse.ch · STIX2 · MISP"]:::ti
+    EXP["Optional selective export<br/>metadata only · PII-stripped"]:::opt
+
+    SNG -- "mTLS syslog" --> LS
+    TI -. "IOC enrichment" .-> LS
+    OS -. "filtered export" .-> EXP
+
+    classDef src fill:#0e7490,color:#fff,stroke:#083344;
+    classDef proc fill:#b45309,color:#fff,stroke:#451a03;
+    classDef store fill:#15803d,color:#fff,stroke:#052e16;
+    classDef view fill:#1d4ed8,color:#fff,stroke:#172554;
+    classDef ti fill:#9333ea,color:#fff,stroke:#3b0764;
+    classDef opt fill:#9ca3af,color:#111,stroke:#374151,stroke-dasharray:4 3;

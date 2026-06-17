@@ -1,0 +1,26 @@
+%% uSOC — two deployment modes for the perimeter
+%% Source: SOHO Architecture §6.1.4 (Moduri de implementare)
+flowchart TB
+    subgraph A["Mode A — Integrated (active) — PREFERRED"]
+        direction TB
+        ISPa["ISP CPE<br/>(bridge mode, services off)"]:::isp
+        Ra["Router SOHO<br/>routing · NAT · firewall · IDS/IPS · DNS filter · certs"]:::edge
+        LANa["LAN / devices"]:::lan
+        ISPa --> Ra --> LANa
+        Ra --> SIEMa["SIEM device"]:::core
+    end
+
+    subgraph B["Mode B — Passive (capture sensor) — FALLBACK"]
+        direction TB
+        ISPb["ISP CPE / existing router<br/>(keeps routing + NAT)"]:::isp
+        SW["switch SPAN port / network TAP"]:::lan
+        Rb["Router SOHO<br/>passive capture only · IDS + Zeek<br/>(no inline blocking)"]:::edge
+        ISPb --> SW
+        SW -. "mirror" .-> Rb
+        Rb --> SIEMb["SIEM device"]:::core
+    end
+
+    classDef isp fill:#6b7280,color:#fff,stroke:#1f2937;
+    classDef edge fill:#0e7490,color:#fff,stroke:#083344;
+    classDef lan fill:#374151,color:#fff,stroke:#111;
+    classDef core fill:#15803d,color:#fff,stroke:#052e16;

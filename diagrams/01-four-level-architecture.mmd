@@ -1,0 +1,35 @@
+%% uSOC — four functional levels and their mapping to the SURU reference implementation
+%% Source: SOHO Architecture §6.1.2 (Arhitectura multi-nivel a µSOC)
+flowchart TB
+    NET([Internet / WAN]):::net
+
+    subgraph RSOHO["R_SOHO — Router SOHO  (open-source firewall appliance)"]
+        direction TB
+        L1["Level 1 — Perimeter & network control<br/>firewall · NAT · VPN · ACME/TLS<br/><i>impl: tier1-perimeter/</i>"]:::edge
+        L2["Level 2 — Detection & inspection (IDS/IPS)<br/>pfBlockerNG+DNSBL · Suricata/Snort · Zeek<br/><i>impl: tier1-perimeter/ + tier2-telemetry/</i>"]:::edge
+    end
+
+    subgraph ASIEM["A_SIEM — local SIEM device  (Docker / VM)"]
+        L3["Level 3 — Correlation, alerting, visualization<br/>OpenSearch · Logstash ingest · ECS v8 · dashboards<br/><i>impl: tier3-core/</i>"]:::core
+    end
+
+    EDR["Level 4 — Endpoint agents (EDR / HIDS) — OPTIONAL<br/>process &amp; OS telemetry · guided response<br/><i>impl: tier2-telemetry/ endpoint agents</i>"]:::opt
+
+    OPS["Operations / control plane<br/>PKI (single Root CA) · frontdoor · monitoring<br/><i>impl: tier4-operations/</i>"]:::ops
+    CLOUD["Optional cloud overlay<br/>Cloudflare Free · external threat-intel feeds"]:::opt
+    AI["Optional AI augmentation<br/>local RAG · embeddings · guided response"]:::opt
+
+    NET --> CLOUD --> RSOHO
+    NET --> RSOHO
+    L1 --> L2
+    RSOHO -- "mTLS syslog (TCP 5140, TLS 1.2+)" --> ASIEM
+    EDR -. "mutual-TLS telemetry" .-> ASIEM
+    OPS -. "config · health · certs" .-> RSOHO
+    OPS -. "config · health · certs" .-> ASIEM
+    AI -. "augments" .-> ASIEM
+
+    classDef net fill:#1f2937,color:#fff,stroke:#111;
+    classDef edge fill:#0e7490,color:#fff,stroke:#083344;
+    classDef core fill:#15803d,color:#fff,stroke:#052e16;
+    classDef ops fill:#7c3aed,color:#fff,stroke:#2e1065;
+    classDef opt fill:#9ca3af,color:#111,stroke:#374151,stroke-dasharray:4 3;

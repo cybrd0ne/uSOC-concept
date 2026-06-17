@@ -1,0 +1,33 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Romanian translation — HELD BACK FROM PUBLICATION
+# ─────────────────────────────────────────────────────────────────────────────
+# The Romanian (`ro`) edition lives in the working tree so it can be written and
+# reviewed locally, but it is intentionally EXCLUDED from version control until
+# it is approved for public release.
+#
+# TO UNBLOCK (publish the Romanian edition):
+#   1. Delete or comment out the single line `docs/ro/` below.
+#   2. git add docs/ro && git commit -m "docs: publish Romanian (ro) edition"
+#   3. git push
+#
+# Until then, `docs/ro/` is untracked and will never be pushed.
+docs/ro/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Rendered diagram artifacts (Mermaid sources in diagrams/*.mmd ARE tracked;
+# locally-rendered images are not — GitHub renders the Mermaid blocks directly)
+# ─────────────────────────────────────────────────────────────────────────────
+diagrams/*.svg
+diagrams/*.png
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OS / editor / scratch
+# ─────────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+/tmp/
+*.tmp

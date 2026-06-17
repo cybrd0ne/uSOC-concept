@@ -1,0 +1,21 @@
+%% uSOC — graduated automated-response hierarchy
+%% Source: SOHO Architecture §6.3.4 (Arhitectura de răspuns automatizat)
+flowchart TB
+    EVT([Security signal / correlated incident]):::evt
+
+    R1["①  Autonomous preventive response<br/>Router SOHO · ~ms latency · no SIEM dependency<br/>pfBlockerNG block · Suricata IPS inline drop"]:::l1
+    R2["②  Orchestrated reactive response<br/>SIEM → Router SOHO (authenticated API)<br/>add source.ip to firewall block table (auto-expire)<br/>+ guided-response notification to user"]:::l2
+    R3["③  Endpoint response (optional EDR)<br/>kill PID · quarantine file · local IP block<br/>full network containment"]:::l3
+    R4["④  Complex SOAR / MCP orchestration<br/>multi-step playbook across components<br/>block + isolate + collect artefacts + update IOC feeds"]:::l4
+
+    EVT --> R1 --> R2 --> R3 --> R4
+
+    note1["Severity / context / hardware tier increase downward.<br/>Lower levels stay functional even if higher levels are unavailable<br/>(graceful degradation — no single point of failure)."]:::note
+    R4 -.-> note1
+
+    classDef evt fill:#1f2937,color:#fff,stroke:#111;
+    classDef l1 fill:#15803d,color:#fff,stroke:#052e16;
+    classDef l2 fill:#0e7490,color:#fff,stroke:#083344;
+    classDef l3 fill:#b45309,color:#fff,stroke:#451a03;
+    classDef l4 fill:#7c3aed,color:#fff,stroke:#2e1065;
+    classDef note fill:#fef9c3,color:#111,stroke:#854d0e,stroke-dasharray:3 3;

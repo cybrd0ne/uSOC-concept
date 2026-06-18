@@ -121,7 +121,7 @@ deliberately **not** tier-1-first:
 1. Certificates  →  2. Tier 3 (SIEM)  →  3. Tier 4 (Operations)  →  4. Tier 1 (Perimeter)
 ```
 
-- **Certificates first** — the single SURU Root CA must exist before anything
+- **Certificates first** — the single Root CA must exist before anything
   else, because every service certificate and the perimeter's mutual-TLS client
   certificate are signed by it. The single-Root-CA PKI lives in
   `tier4-operations/pki/` and underpins the mandatory mutual-TLS described above.

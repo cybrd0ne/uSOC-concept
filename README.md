@@ -127,10 +127,7 @@ in [document 07](./docs/en/07-implementation-mapping.md)):
 This concept is documented in **English** and **Romanian**.
 
 - **English** (`docs/en/`) — published.
-- **Romanian** (`docs/ro/`) — **held back from publication.** The Romanian
-  edition is written and maintained locally but is intentionally excluded from
-  version control until it is approved for release. See
-  [`.gitignore`](./.gitignore) for the one-line unblock procedure.
+- **Romanian** (`docs/ro/`) — **work in progress**
 
 ---
 

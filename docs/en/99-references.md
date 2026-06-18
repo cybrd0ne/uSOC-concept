@@ -47,51 +47,82 @@ The named open-source tools and their role in the µSOC. All are realized in the
 open-source reference implementation at
 [github.com/cybrd0ne/suru-foss](https://github.com/cybrd0ne/suru-foss).
 
-| Tool | Role | Reference tier |
-|------|------|----------------|
-| **pfSense / OPNsense** | Open-source firewall OS hosting the Router SOHO | `tier1-perimeter/` |
-| **pfBlockerNG** | IP/DNS reputation filtering + DNSBL | `tier1-perimeter/` + `tier2-telemetry/` |
-| **Suricata** | Inline IPS / signature detection (preferred, multi-threaded) | `tier1-perimeter/` + `tier2-telemetry/` |
-| **Snort / Talos** | Alternative IDS engine; Talos community rules | `tier2-telemetry/` |
-| **Zeek** | Passive network telemetry (conn/dns/ssl/http/files) | `tier1-perimeter/` |
-| **syslog-ng** | Edge log collection + JSON normalization + TLS forwarding | `tier1-perimeter/` |
-| **Logstash** | SIEM-side residual transform + enrichment to ECS | `tier3-core/` |
-| **OpenSearch + Dashboards** | SIEM data store + visualization | `tier3-core/` |
-| **Filebeat** | Alternative/complementary log shipper | `tier3-core/` |
-| **Ansible** | Agentless (SSH) configuration & remediation automation | `tier4-operations/` |
+| Tool | Role | Reference tier | Docs |
+|------|------|----------------|------|
+| **pfSense / OPNsense** | Open-source firewall OS hosting the Router SOHO | `tier1-perimeter/` | [pfSense](https://docs.netgate.com/pfsense/) · [OPNsense](https://docs.opnsense.org/) |
+| **pfBlockerNG** | IP/DNS reputation filtering + DNSBL | `tier1-perimeter/` + `tier2-telemetry/` | [docs](https://docs.netgate.com/pfsense/en/latest/packages/pfblocker.html) |
+| **Suricata** | Inline IPS / signature detection (preferred, multi-threaded) | `tier1-perimeter/` + `tier2-telemetry/` | [docs](https://docs.suricata.io/en/latest/) |
+| **Snort / Talos** | Alternative IDS engine; Talos community rules | `tier2-telemetry/` | [docs](https://docs.snort.org/) |
+| **Zeek** | Passive network telemetry (conn/dns/ssl/http/files) | `tier1-perimeter/` | [docs](https://docs.zeek.org/en/master/) |
+| **syslog-ng** | Edge log collection + JSON normalization + TLS forwarding | `tier1-perimeter/` | [docs](https://www.syslog-ng.com/technical-documents/list/syslog-ng-open-source-edition) |
+| **Logstash** | SIEM-side residual transform + enrichment to ECS | `tier3-core/` | [docs](https://www.elastic.co/guide/en/logstash/current/index.html) |
+| **OpenSearch + Dashboards** | SIEM data store + visualization | `tier3-core/` | [docs](https://opensearch.org/docs/latest/) |
+| **Filebeat** | Alternative/complementary log shipper | `tier3-core/` | [docs](https://www.elastic.co/guide/en/beats/filebeat/current/index.html) |
+| **Ansible** | Agentless (SSH) configuration & remediation automation | `tier4-operations/` | [docs](https://docs.ansible.com/) |
 
 ---
 
 ## Academic & technical sources
 
-The µSOC concept derives from an underlying **systematic review** and
-**architecture study** of SOHO cybersecurity — the two source works that this
-repository documents. The full bibliography (large-scale router-security analyses,
-post-pandemic SOHO measurement studies, NSM/IDS performance evaluations,
-SOCaaS/MDR market and architecture analyses, collaborative/federated IDS research,
-and threat advisories) is contained in those works.
+The µSOC concept is grounded in the published literature on SOHO cybersecurity —
+large-scale router-security analyses, post-pandemic SOHO measurement studies,
+NSM/IDS performance evaluations, SOC/SOCaaS architecture studies, and threat
+advisories. The works below are the substantive sources for the problem framing,
+threat model, and design rationale used across documents 01–06.
 
-Representative references drawn from the source works:
+### Peer-reviewed publications
 
-- Ye et al., *"Exposed by Default: A Security Analysis of Home Router Default
-  Settings (and Beyond)"* — router default-settings security analysis.
-- Freitas et al., *"Uncovering Hidden Risks in IoT Devices: A Post-Pandemic
-  National Study of SOHO Wi-Fi Router Security"* — national SOHO measurement study.
-- Souchay et al., *"Literature Review of Small Office–Home Office (SOHO) Networks
-  Security from 2017–2022"* — SOHO security mapping study.
-- Alsakran et al., *"Intrusion Detection Systems for Smart Home IoT Devices:
-  Experimental Comparison Study"* — Snort/Suricata/Zeek resource comparison.
-- Gyamfi & Jurcut, *"Intrusion Detection in Internet of Things Systems: A
-  Review…"* — IoT NIDS / MEC / ML review.
-- Wang et al., *"An Empirical Study on the Insecurity of End-of-Life (EoL) IoT
-  Devices"* — EoL device-population vulnerability study.
-- Vielberth et al., *"Security Operations Center: A Systematic Study and Open
-  Challenges"* — SOC building blocks and open challenges.
-- Threat advisories and reporting on **Volt Typhoon / KV botnet**, **TheMoon**,
-  and **TP-Link / Quad7** campaigns targeting SOHO routers.
+1. J. Ye, X. de Carné de Carnavalet, L. Zhao, M. Zhang, L. Wu, and W. Zhang,
+   "Exposed by Default: A Security Analysis of Home Router Default Settings,"
+   in *Proc. 19th ACM Asia Conf. on Computer and Communications Security
+   (AsiaCCS '24)*, Singapore, 2024, pp. 63–79.
+   doi: [10.1145/3634737.3637671](https://doi.org/10.1145/3634737.3637671)
+2. J. Ye, X. de Carné de Carnavalet, L. Zhao, M. Zhang, L. Wu, and W. Zhang,
+   "Exposed by Default: A Security Analysis of Home Router Default Settings and
+   Beyond," *IEEE Internet of Things Journal*, vol. 12, no. 2, pp. 1182–1199,
+   2025. doi: [10.1109/JIOT.2024.3502405](https://doi.org/10.1109/JIOT.2024.3502405)
+3. O. Freitas, F. Taffarel, A. L. dos Santos, and L. A. P. Júnior, "Uncovering
+   Hidden Risks in IoT Devices: A Post-Pandemic National Study of SOHO Wi-Fi
+   Router Security," *Journal of Internet Services and Applications*, vol. 15,
+   no. 1, pp. 485–495, 2024.
+   doi: [10.5753/jisa.2024.3834](https://doi.org/10.5753/jisa.2024.3834)
+4. F. Alsakran, G. Bendiab, S. Shiaeles, and N. Kolokotronis, "Intrusion
+   Detection Systems for Smart Home IoT Devices: Experimental Comparison Study,"
+   in *Security in Computing and Communications (SSCC 2019)*, Communications in
+   Computer and Information Science, vol. 1208, Springer, Singapore, 2020,
+   pp. 89–104.
+   doi: [10.1007/978-981-15-4825-3_7](https://doi.org/10.1007/978-981-15-4825-3_7)
+5. E. Gyamfi and A. Jurcut, "Intrusion Detection in Internet of Things Systems:
+   A Review on Design Approaches Leveraging Multi-Access Edge Computing, Machine
+   Learning, and Datasets," *Sensors*, vol. 22, no. 10, art. 3744, 2022.
+   doi: [10.3390/s22103744](https://doi.org/10.3390/s22103744)
+6. D. Wang, M. Jiang, R. Chang, Y. Zhou, H. Wang, B. Hou, L. Wu, and X. Luo,
+   "An Empirical Study on the Insecurity of End-of-Life (EoL) IoT Devices,"
+   *IEEE Transactions on Dependable and Secure Computing*, vol. 21, no. 4,
+   pp. 3501–3514, 2024.
+   doi: [10.1109/TDSC.2023.3334017](https://doi.org/10.1109/TDSC.2023.3334017)
+7. M. Vielberth, F. Böhm, I. Fichtinger, and G. Pernul, "Security Operations
+   Center: A Systematic Study and Open Challenges," *IEEE Access*, vol. 8,
+   pp. 227756–227779, 2020.
+   doi: [10.1109/ACCESS.2020.3045514](https://doi.org/10.1109/ACCESS.2020.3045514)
 
-> For complete citation details, consult the underlying systematic-review and
-> architecture works that this repository describes.
+### Reports & gray literature
+
+8. G. Souchay et al., "Literature Review of Small Office–Home Office (SOHO)
+   Networks Security from 2017–2022," Ingénieurs de l'Industrie, 2024.
+   *(Engineering-school report; no canonical DOI.)*
+
+### Threat advisories & incident reporting
+
+9. U.S. Department of Justice, Office of Public Affairs, "U.S. Government
+   Disrupts Botnet People's Republic of China Used to Conceal Hacking of
+   Critical Infrastructure" (Volt Typhoon / KV Botnet), Jan. 2024.
+   <https://www.justice.gov/archives/opa/pr/us-government-disrupts-botnet-peoples-republic-china-used-conceal-hacking-critical>
+10. Lumen / Black Lotus Labs, "The Dark Side of TheMoon."
+    <https://blog.lumen.com/the-darkside-of-themoon/>
+11. Malwarebytes, "TP-Link Warns of Botnet Infecting Routers and Targeting
+    Microsoft 365 Accounts" (Quad7 / 7777), Sep. 2025.
+    <https://www.malwarebytes.com/blog/news/2025/09/tp-link-warns-of-botnet-infecting-routers-and-targeting-microsoft-365-accounts>
 
 ---
 
